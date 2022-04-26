@@ -6,3 +6,4 @@
 * Ramírez Torres Irvin Adolfo
 
 ## Trabajos agregados
+* Práctica 1 - Filtros EMA y SMA
