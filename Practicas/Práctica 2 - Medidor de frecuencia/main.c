@@ -2,17 +2,14 @@
 /**
   ******************************************************************************
   * @file           : main.c
-  * @brief          : Main program body
   ******************************************************************************
-  * @attention
+  * En el main.c sólo se hace la declaración de dos funciones, el programa en sí 
+  * desarrolla dentro del código de las interrupciones.
   *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
+  * @Integrantes:
+  * Sandra Lizeth Correa Márquez
+  * César Abraham Delgado Álamo
+  * Irvin Adolfo Ramírez Torres
   ******************************************************************************
   */
 /* USER CODE END Header */
