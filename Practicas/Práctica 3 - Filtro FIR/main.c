@@ -135,7 +135,7 @@ int main(void)
     /* USER CODE BEGIN 3 */
 	  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, 1);	// Enciende el LED
 	  HAL_ADC_Start(&hadc1);			// Inicia el ADC
-	  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
+	  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY); // Lee el ADC y lo guarda en el espacio de memoria
 
 	  for (int k = orden; k != 1; k--){
 		  memoria[k] = memoria[k-1];
