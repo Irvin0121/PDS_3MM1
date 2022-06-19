@@ -140,7 +140,7 @@ int main(void)
 	  for (int k = orden; k != 1; k--){
 		  memoria[k] = memoria[k-1];
 	  }
-	  raw = HAL_ADC_GetValue(&hadc1);		// Lee el valor del ADC
+	  raw = HAL_ADC_GetValue(&hadc1);		//  Va al espacio de memoria donde se guarda el valor de ADC y lo asigna a raw
 	  voltaje = ((float)raw)/4095*3.3;		// Hace la normalización de la lectura a 3.3V
 
 	  memoria[1] = voltaje;				// Se asigna a la memoria el valor del voltaje leído
