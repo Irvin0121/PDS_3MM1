@@ -4,14 +4,10 @@
   * @file           : main.c
   * @brief          : Main program body
   ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * @Integrantes
+  * Sandra Lizeth Correa Márquez
+  * César Abraham Delgado Álamo
+  * Irvin Adolfo Ramírez Torres
   *
   ******************************************************************************
   */
@@ -54,7 +50,7 @@ UART_HandleTypeDef huart1;
  * Filtro pasa bajas
  * Orden 16
  * Método ventana rectangular */
-const float coeficientes_bk[orden] = {
+const float coeficientes_bk[orden] = {	// Coeficientes obtenidos en Matlab
 		-0.036115936687841139474119955821151961572,
 		 0.009006018065783624390596706632550194627,
 		 0.053407386914055617055385738467521150596,
@@ -73,7 +69,7 @@ const float coeficientes_bk[orden] = {
 		 0.009006018065783624390596706632550194627,
 		-0.036115936687841139474119955821151961572
 };
-static float memoria [orden], y_n;
+static float memoria [orden], y_n;	// Memoria para el filtro y la señal filtrada
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -125,7 +121,7 @@ int main(void)
   uint32_t raw=0;
   char msg[30];
 
-  for (int var = 0;  var < orden; var ++) { //Se inicializa el arreglo
+  for (int var = 0;  var < orden; var ++) { // Se inicializa el arreglo cuando inicia el programa
 	memoria[var] = 0;
 }
   /* USER CODE END 2 */
@@ -137,33 +133,28 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, 1);
-	  HAL_ADC_Start(&hadc1);
+	  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, 1);	// Enciende el LED
+	  HAL_ADC_Start(&hadc1);			// Inicia el ADC
 	  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
 
 	  for (int k = orden; k != 1; k--){
 		  memoria[k] = memoria[k-1];
 	  }
-	  raw = HAL_ADC_GetValue(&hadc1);
-	  voltaje = ((float)raw)/4095*3.3;
+	  raw = HAL_ADC_GetValue(&hadc1);		// Lee el valor del ADC
+	  voltaje = ((float)raw)/4095*3.3;		// Hace la normalización de la lectura a 3.3V
 
-	  memoria[1] = voltaje;
-	  y_n = 0;
+	  memoria[1] = voltaje;				// Se asigna a la memoria el valor del voltaje leído
+	  y_n = 0;					// Se inicializa la señal filtrada para asegurar que no tenga valores asignados anteriormente
 
-	  for (int n = 1; n <= orden; n++){
+	  for (int n = 1; n <= orden; n++){		// Hace la multiplicación de los coeficientes, es decir, aplica el filtro
 		  y_n += coeficientes_bk[n] * memoria[n];
 	  }
 
-	  sprintf(msg,"%.3f,",voltaje);								// Convierte el valor de voltaje para transmitirlo
+	  sprintf(msg,"%.3f,",voltaje);						        // Convierte el valor de voltaje (señal original) para transmitirlo
 	  HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY);	// Transmite el primer mensaje (Voltaje)
-	  sprintf(msg,"%.3f\r\n",y_n);								// Convierte el valor de y para transmitirlo
-	  HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY);	// Transmite el segundo mensaje (y)
-	  /*sprintf(msg,"%.3f, ",voltaje);
-	  HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY);
-	  sprintf(msg,"%.3f\r\n",y_n);
-	  HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY);*/
-	  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, 0);
-	  //HAL_Delay(1000); //Retardo para completar el periodo
+	  sprintf(msg,"%.3f\r\n",y_n);							// Convierte el valor de y_m (señal filtrada) para transmitirlo
+	  HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY);	// Transmite el segundo mensaje (y_n)
+	  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, 0);					// Apaga el LED
   }
   /* USER CODE END 3 */
 }
